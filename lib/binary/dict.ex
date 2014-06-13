@@ -158,7 +158,7 @@ defimpl Enumerable, for: Binary.Dict do
 end
 
 defimpl Access, for: Binary.Dict do
-  def access({ Binary.Dict, data }, key) do
+  def get({ Binary.Dict, data }, key) do
     case :lists.keyfind(to_string(key), 1, data) do
       { _, value } -> value
       false -> nil
