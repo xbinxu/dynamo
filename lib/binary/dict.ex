@@ -164,6 +164,24 @@ defimpl Access, for: Binary.Dict do
       false -> nil
     end
   end
+
+  def get_and_update({ Binary.Dict, data }, key, fun)  do
+    get_and_update(data, [], key, fun)
+  end
+
+  defp get_and_update([{key, value}|t], acc, key, fun) do
+    {get, update} = fun.(value)
+    {get, { Binary.Dict, :lists.reverse(acc, [{key, update}|t])} }
+  end
+
+  defp get_and_update([h|t], acc, key, fun) do
+    get_and_update(t, [h|acc], key, fun)
+  end
+
+  defp get_and_update([], acc, key, fun) do
+    {get, update} = fun.(nil)
+    {get, {Binary.Dict, [{key, update}|:lists.reverse(acc)]} }
+  end
 end
 
 defimpl Inspect, for: Binary.Dict do
