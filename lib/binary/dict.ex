@@ -144,10 +144,10 @@ defimpl Access, for: Binary.Dict do
 
 end
 
-# defimpl Inspect, for: Binary.Dict do
-#   import Inspect.Algebra
+defimpl Inspect, for: Binary.Dict do
+  import Inspect.Algebra
 
-#   def inspect(%Binary.Dict{} = dict, opts) do
-#     concat ["%Binary.Dict{ datamap: ", Inspect.Map.inspect(dict.datamap, opts), "}"]
-#   end
-# end
+  def inspect(%Binary.Dict{} = dict, opts) do
+    concat ["#Binary.Dict", Inspect.Map.inspect(dict.datamap, opts)]
+  end
+end
