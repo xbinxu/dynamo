@@ -53,7 +53,6 @@ defmodule Dynamo.Connection.Behaviour do
       resp_charset: "utf-8",
       resp_cookies: [],
       resp_content_type: nil,
-      resp_headers: Binary.Dict.new([{"cache-control", "max-age=0, private, must-revalidate"}]),
       route_params: [],
       state: :unset,
       status: nil,
@@ -65,8 +64,8 @@ defmodule Dynamo.Connection.Behaviour do
       require Record
       @behaviour Dynamo.Connection
 
-      Record.defrecordp :connection, __MODULE__, unquote(fields)
-
+      Record.defrecordp :connection, __MODULE__, unquote(fields) ++ [resp_headers: Binary.Dict.new([{"cache-control", "max-age=0, private, must-revalidate"}])]
+      
       ## Assigns
 
       @doc false
