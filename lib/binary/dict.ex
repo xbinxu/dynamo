@@ -53,7 +53,7 @@ defmodule Binary.Dict do
 
   @doc false
   def has_key?(%__MODULE__{} = dict, key) do
-    Map.has_key?(dict, to_binary(key))
+    Map.has_key?(dict.datamap, to_binary(key))
   end
 
   @doc false
@@ -133,10 +133,10 @@ defimpl Access, for: Binary.Dict do
 
   def get_and_update(%Binary.Dict{} = dict, key, fun)  do
     value =
-       case :maps.find(to_string(key), dict.datamap) do
-         {:ok, value} -> value
-         :error -> nil
-       end
+      case :maps.find(to_string(key), dict.datamap) do
+        {:ok, value} -> value
+        :error -> nil
+      end
 
      {get, update} = fun.(value)
      {get, %{dict | datamap: :maps.put(key, update, dict.datamap)} }
