@@ -12,11 +12,11 @@ defmodule Binary.DictTest do
   end
 
   test :keys do
-    assert Binary.Dict.keys(sample_dict) == ["foo", "baz"]
+    assert Binary.Dict.keys(sample_dict) == ["baz", "foo"]
   end
 
   test :values do
-    assert Binary.Dict.values(sample_dict) == ["bar", "bat"]
+    assert Binary.Dict.values(sample_dict) == ["bat", "bar"]
   end
 
   test :get do

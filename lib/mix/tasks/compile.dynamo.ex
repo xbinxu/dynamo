@@ -78,7 +78,7 @@ defmodule Mix.Tasks.Compile.Dynamo do
       File.mkdir_p!(compile_path)
       Code.prepend_path compile_path
 
-      previous = Mix.Utils.read_manifest(manifest)
+      previous = read_manifest(manifest)
       Enum.each previous, fn entry ->
         Path.join(compile_path, entry <> ".beam") |> File.rm
       end
@@ -86,7 +86,7 @@ defmodule Mix.Tasks.Compile.Dynamo do
       compiled = compile_files to_compile, compile_path, root
       compiled = for { mod, _ } <- compiled, do: atom_to_binary(mod)
 
-      Mix.Utils.write_manifest(manifest, compiled)
+      write_manifest(manifest, compiled)
       compile_templates mod, dynamo[:compiled_templates], templates, compile_path
 
       :ok
@@ -126,4 +126,17 @@ defmodule Mix.Tasks.Compile.Dynamo do
     File.write! Path.join(compile_path, "#{name}.beam"), binary
     Mix.shell.info "Generated #{inspect name}"
   end
+
+  defp read_manifest(file) do
+    case File.read(file) do
+      {:ok, contents} -> String.split(contents, "\n")
+      {:error, _} -> []
+    end
+  end
+
+  def write_manifest(file, entries) do
+    Path.dirname(file) |> File.mkdir_p!
+    File.write!(file, Enum.join(entries, "\n"))
+  end
+
 end

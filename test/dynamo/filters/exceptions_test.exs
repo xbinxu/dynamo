@@ -7,6 +7,10 @@ defmodule Dynamo.Filters.ExceptionsTest do
     end
   end
 
+  # defmodule UnauthorizedError do
+  #   defexception message: "Unauthorized", status: 401
+  # end
+
   defmodule ExceptionsApp do
     use Dynamo.Router
 

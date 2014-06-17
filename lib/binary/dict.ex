@@ -63,7 +63,12 @@ defmodule Binary.Dict do
 
   @doc false
   def get!(%__MODULE__{} = dict, key) do
-    Map.get!(dict.datamap, to_binary(key))
+    case Map.get(dict.datamap, to_binary(key), nil) do 
+      nil -> 
+        raise KeyError, key: key
+      value ->
+        value
+    end
   end
 
   @doc false
@@ -97,12 +102,22 @@ defmodule Binary.Dict do
 
   @doc false
   def update(%__MODULE__{} = dict, key, fun) do
-    %{dict | datamap: Map.update(dict.datamap, to_binary(key), fun)}
+    case dict.datamap[to_binary(key)] do 
+      nil ->
+        raise KeyError, key: key
+      value ->
+        %{dict | datamap: Map.put(dict.datamap, to_binary(key), fun.(value))}
+    end
   end
 
   @doc false
   def update(%__MODULE__{} = dict, key, initial, fun) do
-    %{dict | datamap: Map.update(dict.datamap, to_binary(key), initial, fun)}
+    case dict.datamap[to_binary(key)] do 
+      nil ->
+        %{dict | datamap: Map.put_new(dict.datamap, to_binary(key), initial)}
+      value ->
+        %{dict | datamap: Map.put(dict.datamap, to_binary(key), fun.(value))}
+    end
   end
 
   @doc false
