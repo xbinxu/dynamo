@@ -54,7 +54,7 @@ defmodule Dynamo.Templates.EEXHandler do
     vars   = vars(locals)
     args   = [{ :assigns, [], nil }|vars]
     match  = match(args)
-    source = EEx.compile_string(source, file: identifier)
+    source = EEx.compile_string(source, file: identifier, engine: EEx.Engine)
 
     { args, quote do
       unquote_splicing(match)

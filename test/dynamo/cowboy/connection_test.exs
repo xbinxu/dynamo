@@ -3,16 +3,16 @@ defmodule Dynamo.Cowboy.ConnectionTest do
 
   setup_all do
     Dynamo.Cowboy.run __MODULE__, port: 8011, verbose: false
-    :ok
-  end
 
-  teardown_all do
-    Dynamo.Cowboy.shutdown __MODULE__
+    on_exit fn ->
+      Dynamo.Cowboy.shutdown __MODULE__
+    end
+
     :ok
   end
 
   def service(conn) do
-    function = binary_to_atom hd(conn.path_segments)
+    function = String.to_atom hd(conn.path_segments)
     apply __MODULE__, function, [conn]
   rescue
     exception ->
@@ -144,7 +144,7 @@ defmodule Dynamo.Cowboy.ConnectionTest do
     multipart = "------WebKitFormBoundaryw58EW1cEpjzydSCq\r\nContent-Disposition: form-data; name=\"name\"\r\n\r\nhello\r\n------WebKitFormBoundaryw58EW1cEpjzydSCq\r\nContent-Disposition: form-data; name=\"pic\"; filename=\"foo.txt\"\r\nContent-Type: text/plain\r\n\r\nhello\n\n\r\n------WebKitFormBoundaryw58EW1cEpjzydSCq\r\nContent-Disposition: form-data; name=\"commit\"\r\n\r\nCreate User\r\n------WebKitFormBoundaryw58EW1cEpjzydSCq--\r\n"
     headers   = [
       { "Content-Type", "multipart/form-data; boundary=----WebKitFormBoundaryw58EW1cEpjzydSCq" },
-      { "Content-Length", size(multipart) }
+      { "Content-Length", byte_size(multipart) }
     ]
 
     assert_success request :get, "/params_1", headers, multipart
@@ -429,9 +429,9 @@ defmodule Dynamo.Cowboy.ConnectionTest do
   end
 
   # defrecordp is not a type at elixir 0.14.0
-  # test :inspect do
-  #   assert { 200, _, "#Dynamo.Connection<GET /conn_inspect (cowboy)>" } = request :get, "/conn_inspect"
-  # end
+  test :inspect do
+    assert { 200, _, "#Dynamo.Connection<GET /conn_inspect (cowboy)>" } = request :get, "/conn_inspect"
+  end
 
   def forward_to(conn) do
     assert conn.path_segments == ["forward_to", "foo", "bar", "baz"]

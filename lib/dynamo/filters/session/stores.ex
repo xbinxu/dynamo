@@ -63,7 +63,7 @@ defmodule Session.CookieStore do
 
     cond do
       nil?(secret)      -> raise ArgumentError, message: "CookieStore expects a secret as option"
-      size(secret) < 64 -> raise ArgumentError, message: "CookieStore secret must be at least 64 bytes"
+      byte_size(secret) < 64 -> raise ArgumentError, message: "CookieStore secret must be at least 64 bytes"
       true              -> opts
     end
   end

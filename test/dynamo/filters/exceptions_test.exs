@@ -1,15 +1,14 @@
 defmodule Dynamo.Filters.ExceptionsTest do
-  defexception UnauthorizedError, message: "Unauthorized" do
+  
+  defmodule UnauthorizedError do
+    defexception message: "Unauthorized"
+
     defimpl Dynamo.Exception do
       def status(_exception) do
         401
       end
     end
   end
-
-  # defmodule UnauthorizedError do
-  #   defexception message: "Unauthorized", status: 401
-  # end
 
   defmodule ExceptionsApp do
     use Dynamo.Router
@@ -72,11 +71,11 @@ defmodule Dynamo.Filters.ExceptionsTest do
 
   setup_all do
     :error_logger.tty(false)
-    :ok
-  end
 
-  teardown_all do
-    :error_logger.tty(true)
+    on_exit fn ->
+      :error_logger.tty(true)
+    end
+
     :ok
   end
 

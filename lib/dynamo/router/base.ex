@@ -1,7 +1,9 @@
-defexception Dynamo.Router.InvalidHookError, kind: nil, hook: nil, actual: nil do
-  def message(exception) do
-    "expected #{exception.kind} hook #{inspect exception.hook} to return " <>
-      "a HTTP connection, but got #{inspect exception.actual}"
+defmodule Dynamo.Router.InvalidHookError do
+  defexception kind: nil, hook: nil, actual: nil
+
+  def message(%{kind: kind, hook: hook, actual: actual}) do
+    "expected #{inspect kind} hook #{inspect hook} to return " <>
+      "a HTTP connection, but got #{inspect actual}"
   end
 end
 
@@ -498,7 +500,7 @@ defmodule Dynamo.Router.Base do
   end
 
   defp compile_hook(ref, key, acc, kind, fun) when is_atom(ref) do
-    case atom_to_binary(ref) do
+    case to_string(ref) do
       "Elixir." <> _ ->
         call = quote(do: unquote(ref).unquote(kind)(var!(conn)))
         fun.(call, key, ref, acc)

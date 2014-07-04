@@ -7,11 +7,11 @@ defmodule Dynamo.LoaderTest do
 
   setup_all do
     Dynamo.Loader.append_paths([fixture_path])
-    :ok
-  end
 
-  teardown_all do
-    Dynamo.Loader.stop
+    on_exit fn -> 
+      Dynamo.Loader.stop
+    end
+
     :ok
   end
 

@@ -27,7 +27,7 @@ defmodule SimpleEcto do
 end
 
 defmodule SimpleEcto.Sup do
-  use Supervisor.Behaviour
+  use Supervisor
 
   def start_link do
     :supervisor.start_link({ :local, __MODULE__ }, __MODULE__, [])

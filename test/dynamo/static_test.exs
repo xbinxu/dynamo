@@ -34,11 +34,11 @@ defmodule Dynamo.StaticTest do
   setup do
     File.touch!(@asset, { { 2010, 1, 1 }, { 0, 0, 0 } })
     Dynamo.Static.start_link(App)
-    :ok
-  end
 
-  teardown do
-    Dynamo.Static.stop(App)
+    on_exit fn ->
+      Dynamo.Static.stop(App)
+    end
+    
     :ok
   end
 

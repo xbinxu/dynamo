@@ -38,11 +38,11 @@ defmodule Dynamo.HTTP.RenderTest do
   setup_all do
     RenderingApp.start_link
     Dynamo.under_test(RenderingApp)
-    :ok
-  end
 
-  teardown_all do
-    Dynamo.under_test(nil)
+    on_exit fn ->
+      Dynamo.under_test(nil)
+    end
+
     :ok
   end
 
@@ -69,7 +69,7 @@ defmodule Dynamo.HTTP.RenderTest do
 
   test "uses app prelude" do
     conn = get("/prelude.html").send
-    assert conn.sent_body == (?H |> integer_to_binary)
+    assert conn.sent_body == (?H |> to_string)
     assert conn.resp_content_type == "text/html"
   end
 

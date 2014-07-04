@@ -6,11 +6,11 @@ defmodule Dynamo.TemplatesTest do
 
   setup_all do
     Dynamo.Templates.Renderer.start_link(@renderer)
-    :ok
-  end
 
-  teardown_all do
-    Dynamo.Templates.Renderer.stop(@renderer)
+    on_exit fn ->
+      Dynamo.Templates.Renderer.stop(@renderer)
+    end
+    
     :ok
   end
 

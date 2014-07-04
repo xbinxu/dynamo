@@ -7,7 +7,7 @@ defmodule Binary.DictTest do
   end
 
   test :new_with_pairs_and_transformation do
-    dict = Binary.Dict.new [foo: "bar"], fn({ k, v }) -> { k, atom_to_binary(k) <> v } end
+    dict = Binary.Dict.new [foo: "bar"], fn({ k, v }) -> { k, to_string(k) <> v } end
     assert Binary.Dict.to_list(dict) == [{ "foo", "foobar" }]
   end
 

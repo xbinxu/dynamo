@@ -97,7 +97,7 @@ defmodule Dynamo.Cowboy.BodyParser do
   end
 
   defp strip_quotes(<<?", remaining :: binary>>) do
-    binary_part(remaining, 0, size(remaining) - 1)
+    binary_part(remaining, 0, byte_size(remaining) - 1)
   end
 
   defp strip_quotes(other) do

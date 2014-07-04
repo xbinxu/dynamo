@@ -39,11 +39,11 @@ defmodule Dynamo.HTTP.CaseTest do
 
   setup_all do
     Dynamo.under_test(SessionApp)
-    :ok
-  end
 
-  teardown_all do
-    Dynamo.under_test(nil)
+    on_exit fn ->
+      Dynamo.under_test(nil)
+    end
+
     :ok
   end
 

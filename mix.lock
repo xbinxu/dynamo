@@ -1,4 +1,4 @@
-%{"cowboy": {:git, "git://github.com/extend/cowboy.git", "ee3ad5e51005b453230804036e092e1d2ceebe4f", []},
+%{"cowboy": {:git, "git://github.com/extend/cowboy.git", "1a71a733c37df70c15ebfd28157b10915cd738d1", []},
   "cowlib": {:git, "git://github.com/extend/cowlib.git", "e2ffefe828b918486e2cd76e44c54ae9b62c616e", [ref: "0.6.2"]},
   "ets_lru": {:git, "https://github.com/cloudant/ets_lru.git", "54df566f02412595f69500ce2326d31cfa55ae7a", [ref: "master"]},
   "hackney": {:git, "git://github.com/benoitc/hackney.git", "1a427d1e1820f89699b51228746e586e53d15cf9", [tag: "0.12.1"]},

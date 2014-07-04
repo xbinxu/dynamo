@@ -42,7 +42,7 @@ defmodule Dynamo.Router.BaseTest do
       conn.resp_body("OK").assign :value, 200
     end
 
-    get "/7/:foo" when size(foo) <= 3 do
+    get "/7/:foo" when byte_size(foo) <= 3 do
       conn.resp_body("OK").assign :value, foo
     end
 

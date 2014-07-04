@@ -17,13 +17,14 @@ defmodule Dynamo.Template do
 
   * `:ref` - A reference for already compiled templates
   """
-  defstruct [key: nil, identifier: nil, format: nil,
-  handler: nil, updated_at: nil, extra: nil, ref: nil, finder: nil]
+  defstruct key: nil, identifier: nil, format: nil, handler: nil, updated_at: nil, extra: nil, ref: nil, finder: nil
 end
 
-defexception Dynamo.TemplateNotFound, query: nil, paths: nil do
-  def message(exception) do
-    "Could not find template #{inspect exception.query} in any of the paths: #{inspect exception.paths}"
+defmodule Dynamo.TemplateNotFound do
+  defexception query: nil, paths: nil
+
+  def message(%{query: query, paths: paths}) do
+    "Could not find template #{inspect query} in any of the paths: #{inspect paths}"
   end
 end
 
@@ -125,7 +126,7 @@ defmodule Dynamo.Templates do
         end
       end
 
-    { :module, _, binary, _ } = Module.create(name, contents, file: "(#{inspect name})")
+    { :module, _, binary, _ } = Module.create(name, contents, [file: "(#{inspect name})", line: 1])
     binary
   end
 end
