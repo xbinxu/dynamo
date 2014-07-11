@@ -29,7 +29,7 @@ defmodule Dynamo.HTTP.Redirect do
       # terminated by a colon (":").
       unless to =~ ~r{^(\w[\w+.-]*:|//).*} do
         conn = conn.fetch :headers
-        if conn.req_headers["x-forward-proto"] do 
+        if conn.req_headers["x-forwarded-proto"] do 
           to = Enum.join([conn.req_headers["x-forward-proto"], "://", conn.host, "/"], "") <> to
         else
           to = conn.host_url <> to
