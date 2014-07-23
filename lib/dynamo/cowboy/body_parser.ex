@@ -4,8 +4,12 @@ defmodule Dynamo.Cowboy.BodyParser do
   require :cowboy_req, as: R
 
   def parse(dict, req) do
-    { :ok, type, req } = R.parse_header("content-type", req)
-    parse_body(type, dict, req)
+    case R.parse_header("content-type", req) do 
+      { :ok, type, req } -> 
+        parse_body(type, dict, req)
+      { :error, _ } -> 
+        parse_body({ "application", "x-www-form-urlencoded", "" }, dict, req)
+    end
   end
 
   defp parse_body({ "application", "x-www-form-urlencoded", _ }, dict, req) do

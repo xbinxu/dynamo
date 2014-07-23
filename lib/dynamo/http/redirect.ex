@@ -1,4 +1,7 @@
 defmodule Dynamo.HTTP.Redirect do
+
+  import Lager
+
   @moduledoc """
   Conveniences to redirect a connection.
   To use them, just import this module.
@@ -30,7 +33,8 @@ defmodule Dynamo.HTTP.Redirect do
       unless to =~ ~r{^(\w[\w+.-]*:|//).*} do
         conn = conn.fetch :headers
         if conn.req_headers["x-forwarded-proto"] do 
-          to = Path.join(Enum.join([conn.req_headers["x-forwarded-proto"], "://", conn.host], ""), to)
+          host_url = Enum.join([conn.req_headers["x-forwarded-proto"], "://", conn.host], "")
+          to = host_url <> to
         else
           to = conn.host_url <> to
         end
