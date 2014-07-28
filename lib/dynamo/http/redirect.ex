@@ -31,13 +31,7 @@ defmodule Dynamo.HTTP.Redirect do
       # period ("."), or hyphen ("-") characters; and is
       # terminated by a colon (":").
       unless to =~ ~r{^(\w[\w+.-]*:|//).*} do
-        conn = conn.fetch :headers
-        if conn.req_headers["x-forwarded-proto"] do 
-          host_url = Enum.join([conn.req_headers["x-forwarded-proto"], "://", conn.host], "")
-          to = host_url <> to
-        else
-          to = conn.host_url <> to
-        end
+        to = conn.host_url <> to
       end
     else
       raise ArgumentError, message: "Expected :to to be given to redirect"
