@@ -77,25 +77,57 @@ defmodule Dynamo.Cowboy.Connection do
 
   @doc false
   def host(connection(req: req)) do
-    { host, _ } = R.host req
-    host
+    case R.header("x-forwarded-host", req) do 
+      { :undefined, _ } -> 
+        { host, _ } = R.host req
+        host
+      { fhost, _ } ->
+        [h | _] = String.split(fhost, ", ?", parts: 2)
+        h
+    end
   end
 
   @doc false
   def port(connection(req: req)) do
-    { port, _ } = R.port req
-    port
+    case R.header("x-forwarded-port", req) do 
+      { :undefined, _ } -> 
+        { port, _ } = R.port req
+        if is_integer(port) do 
+          port 
+        else
+          port |> to_string |> String.to_integer
+        end
+      { fport, _ } -> 
+        [p | _] = String.split(fport, ", ?", parts: 2)
+        String.to_integer(p)
+    end
   end
 
   @doc false
-  def host_url(connection(req: req)) do
-    { host_url, _ } = R.host_url req
-    host_url
+  def host_url(conn) do
+    host = __MODULE__.host(conn)
+    proto = __MODULE__.scheme(conn)
+    port = __MODULE__.port(conn)
+
+    uport = case {proto, port} do 
+              {_, :undefined} -> ""
+              {"http", 80} -> ""
+              {"https", 443} -> ""
+              _ -> ":#{port}"
+            end
+
+    "#{proto}://#{host}#{uport}"
   end
 
   @doc false
-  def scheme(connection(scheme: scheme)) do
-    scheme
+  def scheme(connection(scheme: scheme, req: req)) do
+    case R.header("x-forwarded-proto", req) do 
+      { :undefined, _ } -> 
+        scheme
+      { fsch, _ } ->
+        [s | _] = String.split(fsch, ", ?", parts: 2)
+        s
+    end
   end
 
   ## Response API
