@@ -1,7 +1,5 @@
 defmodule Dynamo.HTTP.Redirect do
 
-  import Lager
-
   @moduledoc """
   Conveniences to redirect a connection.
   To use them, just import this module.
